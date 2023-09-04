@@ -1,0 +1,10 @@
+.container {
+  max-width: 100vw;
+  min-height: 100vh;
+  overflow: hidden;
+  &.dark {
+    transition-duration: 0.3s;
+    background-color: var(--dark_background);
+    color: var(--light_text);
+  }
+}
