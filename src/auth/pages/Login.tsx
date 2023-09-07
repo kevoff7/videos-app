@@ -1,16 +1,27 @@
 import { Form } from '../../components/form';
-import { Name } from '../../components/form/components';
+import { useAuthStore } from '../../store/auth';
 import { Layout } from '../components';
+import { Toaster, toast } from 'sonner';
 import styles from './styles.module.scss';
-import Swal from 'sweetalert2';
+import { useEffect } from 'react';
 
 export const Login = () => {
-  const login = (formData: Record<string, string>) => {
-    console.log(formData);
+  const checkingCredentials = useAuthStore(
+    (state) => state.checkingCredentials
+  );
+  const errorMessage = useAuthStore((state) => state.errorMessage);
+  const loginUser = useAuthStore((state) => state.loginUser);
+  const login = (formData: any) => {
+    void loginUser(formData);
   };
+  useEffect(() => {
+    if (errorMessage === undefined) return;
+    errorMessage.map((error) => toast.error(error.message));
+  }, [errorMessage]);
   return (
     <Layout>
       <div className={styles.form}>
+        <Toaster richColors expand={true} />
         <Form
           title="Inicia Sesión"
           description="Formulario para iniciar sesíon"
@@ -19,17 +30,20 @@ export const Login = () => {
           <div>
             <Form.Input
               label="Correo"
-              name={Name.Email}
+              name={'email'}
               placeholder="Ingresa tu correo..."
             />
             <Form.Input
               label="Contraseña"
-              name={Name.Password}
+              name={'password'}
               placeholder="Ingresa tu contraseña..."
               type="password"
             />
           </div>
-          <Form.SubmitButton buttonText="Iniciar Sesión" />
+          <Form.SubmitButton
+            buttonText="Iniciar Sesión"
+            check={checkingCredentials}
+          />
           <Form.Footer
             description="Te olvidaste tu contraseña?"
             textLink="Recuperar contraseña"

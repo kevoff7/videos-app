@@ -1,36 +1,20 @@
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { FormContext, type FormContextType } from '..';
 
 import styles from './styles.module.scss';
 import { useTheme } from '../../../context/ThemeContext';
 
-export enum Name {
-  Email = 'email',
-  Password = 'password',
-  Passwordconfirmed = 'passwordconfirmed'
-}
-
 interface InputProps {
   type?: 'text' | 'password';
   label: string;
-  name: Name;
+  name: string;
   placeholder?: string;
 }
 export const Input = ({ type, label, name, placeholder }: InputProps) => {
   const { theme } = useTheme();
-  const {
-    formValues,
-    formValidation,
-    handleChange,
-    isFirstClick,
-    setFormValues
-  } = useContext(FormContext) as FormContextType;
-  const data = isFirstClick ? formValidation : null;
-  useEffect(() => {
-    setFormValues((prevState) => {
-      return { ...prevState, [name]: '' };
-    });
-  }, []);
+  const { formValues, handleChange } = useContext(
+    FormContext
+  ) as FormContextType;
 
   return (
     <div className={`${styles.inputContainer} ${styles[theme]}`}>
@@ -43,7 +27,6 @@ export const Input = ({ type, label, name, placeholder }: InputProps) => {
         onChange={handleChange}
         placeholder={placeholder}
       />
-      {data !== null && <span className={styles.textError}>{data[name]}</span>}
     </div>
   );
 };

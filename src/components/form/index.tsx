@@ -1,6 +1,6 @@
-import { createContext, useState } from 'react';
+import { createContext } from 'react';
 
-import { Input, SubmitButton, Footer, Name } from './components';
+import { Input, SubmitButton, Footer } from './components';
 
 import styles from './styles.module.scss';
 import { useTheme } from '../../context/ThemeContext';
@@ -9,16 +9,10 @@ import { useForm } from '../../hooks/useForm';
 export type FormValues = Record<string, string>;
 export type FormValidation = Record<string, string | null>;
 
-export type FormValidations = Record<
-  Name,
-  [(value: string) => boolean, string]
->;
-
 export interface FormContextType {
   formValues: FormValues;
   formValidation: FormValidation;
   handleChange: ({ target }: React.ChangeEvent<HTMLInputElement>) => void;
-  isFirstClick: boolean;
   setFormValues: React.Dispatch<React.SetStateAction<FormValues>>;
 }
 
@@ -33,40 +27,15 @@ export const FormContext = createContext<FormContextType | undefined>(
   undefined
 );
 
-const formValidations: FormValidations = {
-  [Name.Email]: [
-    (value) => value.includes('@'),
-    'El correo debe de tener un @'
-  ],
-  [Name.Password]: [
-    (value) => value.length >= 6,
-    'El password debe de tener mas de 6 caracteres'
-  ],
-  [Name.Passwordconfirmed]: [
-    (value) => value.length >= 6,
-    'El password debe de tener mas de 6 caracteres'
-  ]
-};
-
 export const Form = ({ title, description, children, onSubmit }: FormProps) => {
   const { theme } = useTheme();
-  const {
-    formValues,
-    formValidation,
-    handleChange,
-    setFormValues,
-    isFormValid,
-    resetForm
-  } = useForm(formValidations);
-  const [isFirstClick, setFirstClick] = useState<boolean>(false);
+  const { formValues, formValidation, handleChange, setFormValues, resetForm } =
+    useForm();
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    if (!isFirstClick) {
-      setFirstClick(true);
-    }
-    if (!isFormValid()) return;
+
     onSubmit(formValues);
-    resetForm();
+    // resetForm();
   };
 
   return (
@@ -75,7 +44,6 @@ export const Form = ({ title, description, children, onSubmit }: FormProps) => {
         formValues,
         formValidation,
         handleChange,
-        isFirstClick,
         setFormValues
       }}
     >
