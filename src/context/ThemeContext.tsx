@@ -3,6 +3,7 @@ import { createContext, useState, useContext, useEffect } from 'react';
 interface ThemeContextType {
   theme: 'light' | 'dark';
   toggleTheme: () => void;
+  themeLight: boolean;
 }
 
 interface ContextProps {
@@ -11,7 +12,8 @@ interface ContextProps {
 
 const ThemeContext = createContext<ThemeContextType>({
   theme: 'dark',
-  toggleTheme: () => null
+  toggleTheme: () => null,
+  themeLight: false
 });
 
 export const ThemeProvider = ({ children }: ContextProps) => {
@@ -25,10 +27,13 @@ export const ThemeProvider = ({ children }: ContextProps) => {
   useEffect(() => {
     localStorage.setItem('theme', theme);
   }, [theme]);
+
   const values: ThemeContextType = {
     theme,
-    toggleTheme
+    toggleTheme,
+    themeLight: theme === 'light'
   };
+
   return (
     <ThemeContext.Provider value={values}>{children}</ThemeContext.Provider>
   );

@@ -7,15 +7,23 @@ import {
   relavidateJWTRequest
 } from '../api/auth';
 
+interface ProfileProps {
+  ok: boolean;
+  name: string;
+  id: string;
+  token: string;
+}
+
 interface State {
   status: Status;
   errorMessage: undefined | Array<Record<string, string>>;
-  profile: object;
+  profile: ProfileProps | undefined;
   checkingCredentials: boolean;
   loginUser: (user: LoginUser) => Promise<void>;
   registerUser: (user: CreateUser) => Promise<void>;
   clearErrorMessage: () => void;
   checkAuthToken: () => Promise<void>;
+  logOut: () => void;
 }
 
 export enum Status {
@@ -27,7 +35,7 @@ export enum Status {
 export const useAuthStore = create<State>((set) => {
   return {
     status: Status.Checking,
-    profile: {},
+    profile: undefined,
     errorMessage: undefined,
     checkingCredentials: false,
 
@@ -36,7 +44,11 @@ export const useAuthStore = create<State>((set) => {
       try {
         const { data } = await registerRequest(user);
         localStorage.setItem('token', data.token);
-        set({ profile: data, status: Status.Authenticated });
+        set({
+          profile: data,
+          status: Status.Authenticated,
+          errorMessage: undefined
+        });
       } catch (error: any) {
         set({
           errorMessage: error.response.data.msg,
@@ -51,7 +63,11 @@ export const useAuthStore = create<State>((set) => {
       try {
         const { data } = await loginRequest(user);
         localStorage.setItem('token', data.token);
-        set({ profile: data, status: Status.Authenticated });
+        set({
+          profile: data,
+          status: Status.Authenticated,
+          errorMessage: undefined
+        });
       } catch (error: any) {
         set({
           errorMessage: error.response.data.msg,
@@ -65,7 +81,7 @@ export const useAuthStore = create<State>((set) => {
       const token = localStorage.getItem('token');
 
       if (token === null) {
-        set({ profile: {}, status: Status.NotAuthenticated });
+        set({ profile: undefined, status: Status.NotAuthenticated });
         return;
       }
       try {
@@ -74,11 +90,18 @@ export const useAuthStore = create<State>((set) => {
         set({ profile: data, status: Status.Authenticated });
       } catch (error) {
         localStorage.clear();
-        set({ profile: {}, status: Status.NotAuthenticated });
+        set({ profile: undefined, status: Status.NotAuthenticated });
       }
     },
     clearErrorMessage: () => {
       set({ errorMessage: undefined });
+    },
+    logOut: () => {
+      localStorage.clear();
+      set({
+        profile: undefined,
+        status: Status.NotAuthenticated
+      });
     }
   };
 });

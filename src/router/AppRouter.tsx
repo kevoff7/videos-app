@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { Login, Register } from '../auth/pages';
 import { Status, useAuthStore } from '../store/auth';
 import { useEffect } from 'react';
+import { Home, Profile } from '../video-box/pages';
 
 export const AppRouter = () => {
   const checkAuthToken = useAuthStore((state) => state.checkAuthToken);
@@ -12,7 +13,6 @@ export const AppRouter = () => {
   }, []);
 
   if (status === Status.Checking) {
-    console.log(1);
     return <h1>Cargando...</h1>;
   }
   return (
@@ -26,7 +26,9 @@ export const AppRouter = () => {
         </>
       ) : (
         <>
-          <Route path="/*" element={<h1>g3</h1>} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/*" element={<Navigate to={'/home'} />} />
         </>
       )}
       ;
