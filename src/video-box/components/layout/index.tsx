@@ -11,16 +11,16 @@ interface LayoutVideoNubeProps {
 export const Layout = ({ children }: LayoutVideoNubeProps) => {
   const { theme } = useTheme();
   const profile = useAuthStore((state) => state.profile);
+
   const isModalOpenLogout = useUiStore((state) => state.isModalOpenLogout);
   const isModalOpenImageProfile = useUiStore(
     (state) => state.isModalOpenImageProfile
   );
-
   return (
     <main className={`${styles.container} ${styles[theme]}`}>
       {isModalOpenLogout && <LogOutModal />}
-      {isModalOpenImageProfile && (
-        <ImageProfileModal content={profile?.name[0] as string} />
+      {isModalOpenImageProfile && profile.name !== undefined && (
+        <ImageProfileModal content={profile.imageUrl ?? profile.name[0]} />
       )}
       <Navbar />
       <section className={`${styles.content} ${styles[theme]}`}>

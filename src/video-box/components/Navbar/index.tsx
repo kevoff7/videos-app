@@ -20,7 +20,6 @@ export const Navbar = () => {
     }
     return themeLight ? '#6553b2' : '#4a4a4a';
   };
-
   const links = [
     {
       text: 'Home',
@@ -33,17 +32,20 @@ export const Navbar = () => {
       img: <Home height="20" width="25" color={colorIcon('profile')} />
     }
   ];
-
   return (
     <nav className={styles.nav}>
       <div className={styles.nameProfile}>
-        <span
+        <div
           className={`${styles.spanProfile} ${styles[theme]}`}
           onClick={onModalOpenImageProfile}
         >
-          {profile?.name[0]}
-        </span>
-        <p>{profile?.name}</p>
+          {profile.imageUrl == null ? (
+            profile.name[0]
+          ) : (
+            <img src={profile.imageUrl} alt="err" />
+          )}
+        </div>
+        <p>{profile.name}</p>
       </div>
       <label className={styles.toggle}>
         <input

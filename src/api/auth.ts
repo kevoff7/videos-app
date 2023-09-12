@@ -7,6 +7,13 @@ export interface CreateUser {
   confirmedPassword: string;
 }
 
+interface AddImageRequest {
+  uid: number;
+  data: {
+    url: string | null;
+  };
+}
+
 export type LoginUser = Omit<CreateUser, 'name' | 'confirmedPassword'>;
 
 export const registerRequest = async (data: CreateUser) => {
@@ -19,4 +26,8 @@ export const loginRequest = async (data: LoginUser) => {
 
 export const relavidateJWTRequest = async () => {
   return await authApi.get('/auth/renew');
+};
+
+export const addImageRequest = async ({ uid, data }: AddImageRequest) => {
+  return await authApi.put(`/auth/${uid}`, data);
 };

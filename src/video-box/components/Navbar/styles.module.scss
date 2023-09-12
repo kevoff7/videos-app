@@ -11,12 +11,22 @@
     font-size: 2rem;
     text-transform: capitalize;
     .spanProfile {
+      width: 50px;
+      height: 50px;
       cursor: pointer;
-      padding: 0.3rem 0.9rem;
       background-color: #6553b2;
       border-radius: 0.5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
       &.dark {
         background-color: var(--dark_container_background);
+      }
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
       }
     }
   }
