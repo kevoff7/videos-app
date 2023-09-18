@@ -7,6 +7,7 @@ import {
   relavidateJWTRequest
 } from '../api/auth';
 import { addImageRequest } from '../api/auth';
+import { createLikeEventsRequest } from '../api/events';
 
 interface ProfileProps {
   name: string;
@@ -22,6 +23,7 @@ interface State {
   profile: ProfileProps;
   checkingCredentials: boolean;
   messageEvent: undefined | any;
+  messageLikeEvent: undefined | any;
 }
 
 interface Actions {
@@ -33,6 +35,8 @@ interface Actions {
   startSavingEvent: (url: string) => Promise<void>;
   startDeletingEvent: () => Promise<void>;
   clearMessageEvent: () => void;
+  startLikeCreateEvents: (value: number) => Promise<void>;
+  clearMessageLikeEvent: () => void;
 }
 
 export enum Status {
@@ -54,6 +58,7 @@ export const useAuthStore = create<State & Actions>((set, get) => {
     errorMessage: undefined,
     checkingCredentials: false,
     messageEvent: undefined,
+    messageLikeEvent: undefined,
 
     registerUser: async (user: CreateUser) => {
       set({ checkingCredentials: true });
@@ -196,6 +201,27 @@ export const useAuthStore = create<State & Actions>((set, get) => {
     },
     clearMessageEvent: () => {
       set({ messageEvent: undefined });
+    },
+    startLikeCreateEvents: async (id: number) => {
+      try {
+        const { data } = await createLikeEventsRequest(id);
+        set((state) => ({
+          profile: {
+            ...state.profile,
+            liked_videos: data.likedVideos
+          },
+          messageLikeEvent: data.msg
+        }));
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setTimeout(() => {
+          set({ messageLikeEvent: undefined });
+        }, 2000);
+      }
+    },
+    clearMessageLikeEvent: () => {
+      set({ messageLikeEvent: undefined });
     }
   };
 });

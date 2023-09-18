@@ -1,7 +1,7 @@
 import { useTheme } from '../../../context/ThemeContext';
 import styles from './styles.module.scss';
 export const Navbar = () => {
-  const { toggleTheme } = useTheme();
+  const { toggleTheme, themeLight } = useTheme();
   return (
     <nav className={styles.nav}>
       <label>
@@ -9,9 +9,8 @@ export const Navbar = () => {
           <input
             className={styles['toggle-state']}
             type="checkbox"
-            name="check"
-            value="check"
             onClick={toggleTheme}
+            defaultChecked={themeLight}
           />
           <div className={styles.indicator}></div>
         </div>

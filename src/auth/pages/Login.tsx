@@ -22,36 +22,24 @@ export const Login = () => {
     <Layout>
       <div className={styles.form}>
         <Toaster richColors expand={true} />
-        <Form
-          title="Inicia Sesión"
-          description="Formulario para iniciar sesíon"
-          onSubmit={login}
-        >
+        <Form title="Login" description="Login form" onSubmit={login}>
           <div>
             <Form.Input
-              label="Correo"
+              label="Email"
               name={'email'}
-              placeholder="Ingresa tu correo..."
+              placeholder="test@gmail.com"
             />
             <Form.Input
-              label="Contraseña"
+              label="Password"
               name={'password'}
-              placeholder="Ingresa tu contraseña..."
+              placeholder="123456"
               type="password"
             />
           </div>
-          <Form.SubmitButton
-            buttonText="Iniciar Sesión"
-            check={checkingCredentials}
-          />
+          <Form.SubmitButton buttonText="Login" check={checkingCredentials} />
           <Form.Footer
-            description="Te olvidaste tu contraseña?"
-            textLink="Recuperar contraseña"
-            link="#"
-          />
-          <Form.Footer
-            description="Aun no tienes cuenta?"
-            textLink="Registrate"
+            description="Don't have an account?"
+            textLink="Register"
             link="/auth/register"
           />
         </Form>

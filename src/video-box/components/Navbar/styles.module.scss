@@ -30,6 +30,7 @@
       }
     }
   }
+
   .list {
     height: 100%;
     margin-top: 4rem;
@@ -39,6 +40,7 @@
     gap: 1rem;
     nav,
     a {
+      border: 2px solid transparent;
       display: flex;
       align-items: center;
       gap: 0.8rem;
@@ -99,7 +101,7 @@
   cursor: pointer;
   isolation: isolate;
   position: relative;
-  height: 40px;
+  height: 30px;
   width: 70px;
   border-radius: 15px;
   overflow: hidden;
@@ -132,7 +134,51 @@
 
 @media (max-width: 750px) {
   .nav {
-    background-color: red;
-    max-width: 150px;
+    margin: 0;
+    max-width: 100%;
+    position: relative;
+
+    .nameProfile {
+      flex-direction: row-reverse;
+      margin-right: 1rem;
+      margin-top: 1rem;
+      position: relative;
+      .buttonMenu {
+        display: initial;
+        position: absolute;
+        background-color: red;
+        left: 0;
+        width: 0;
+        margin-left: 1rem;
+        cursor: pointer;
+        z-index: 10;
+      }
+    }
+    .containerToggle {
+      display: flex;
+      justify-content: end;
+      margin-right: 1rem;
+    }
+
+    .list {
+      height: 100vh;
+      background-color: red;
+      margin: 0;
+      padding: 6rem 1rem 0 1rem;
+      .buttonMenu {
+        position: absolute;
+        top: 0;
+        width: 0;
+        margin-top: 1.28rem;
+        cursor: pointer;
+      }
+      &.light {
+        background-color: var(--system_background);
+      }
+
+      &.dark {
+        background-color: var(--dark_background);
+      }
+    }
   }
 }

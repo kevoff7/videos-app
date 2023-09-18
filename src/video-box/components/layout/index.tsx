@@ -1,7 +1,6 @@
-import { ImageProfileModal, Navbar } from '..';
+import { LogOutModal, ImageProfileModal, Navbar } from '..';
 import { useTheme } from '../../../context/ThemeContext';
 import { useAuthStore, useUiStore } from '../../../store';
-import { LogOutModal } from '../';
 import styles from './styles.module.scss';
 
 interface LayoutVideoNubeProps {
@@ -16,12 +15,14 @@ export const Layout = ({ children }: LayoutVideoNubeProps) => {
   const isModalOpenImageProfile = useUiStore(
     (state) => state.isModalOpenImageProfile
   );
+
   return (
     <main className={`${styles.container} ${styles[theme]}`}>
       {isModalOpenLogout && <LogOutModal />}
-      {isModalOpenImageProfile && profile.name !== undefined && (
+      {isModalOpenImageProfile && (
         <ImageProfileModal content={profile.imageUrl ?? profile.name[0]} />
       )}
+
       <Navbar />
       <section className={`${styles.content} ${styles[theme]}`}>
         {children}

@@ -5,7 +5,7 @@ import { VideosApp } from './VideosApp';
 import './styles/global.scss';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  // <React.StrictMode>
-  <VideosApp />
-  // </React.StrictMode>
+  <React.StrictMode>
+    <VideosApp />
+  </React.StrictMode>
 );

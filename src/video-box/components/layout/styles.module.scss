@@ -3,7 +3,6 @@
   min-height: 100vh;
   overflow: hidden;
   display: flex;
-
   &.dark {
     transition-duration: 0.3s;
     background-color: var(--dark_background);
@@ -35,7 +34,12 @@
 
 @media (max-width: 750px) {
   .container {
+    flex-direction: column;
     .content {
+      // background-color: red;
+      width: 90%;
+      margin: 2rem auto;
+      // text-align: center;
       .cardLogOut {
         height: 200px;
         width: 200px;

@@ -1,38 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Button } from '..';
+import { Button, Modal } from '..';
 import { useTheme } from '../../../context/ThemeContext';
 import { useAuthStore, useUiStore } from '../../../store';
-import styles from './styles.module.scss';
 import { Toaster, toast } from 'sonner';
-
-export const LogOutModal = () => {
-  const { theme } = useTheme();
-  const onModalCloseLogOut = useUiStore((state) => state.onModalCloseLogOut);
-
-  const logOut = useAuthStore((state) => state.logOut);
-
-  const handleClickLogOut = () => {
-    logOut();
-    onModalCloseLogOut();
-  };
-
-  const handleModalClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (event.target === event.currentTarget) onModalCloseLogOut();
-  };
-  return (
-    <div className={`${styles.modalContainer}`} onClick={handleModalClick}>
-      <div className={`${styles.cardLogOut} ${styles[theme]}`}>
-        <p>
-          Seguro que quieres salir de <br /> VideoBox?
-        </p>
-        <div>
-          <Button text="Salir" type="primary" onClick={handleClickLogOut} />
-          <Button text="Cancelar" onClick={onModalCloseLogOut} />
-        </div>
-      </div>
-    </div>
-  );
-};
+import styles from './styles/imageProfile.module.scss';
 
 export const ImageProfileModal = ({ content }: { content: string }) => {
   const { theme } = useTheme();
@@ -49,11 +20,6 @@ export const ImageProfileModal = ({ content }: { content: string }) => {
   const startSavingEvent = useAuthStore((state) => state.startSavingEvent);
   const startDeletingEvent = useAuthStore((state) => state.startDeletingEvent);
 
-  const handleClickImageProfile = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (event.target !== event.currentTarget) return;
-    onModalCloseImageProfile();
-    clearMessageEvent();
-  };
   const handleClickClose = () => {
     onModalCloseImageProfile();
     clearMessageEvent();
@@ -63,12 +29,8 @@ export const ImageProfileModal = ({ content }: { content: string }) => {
     void startSavingEvent(url);
   };
 
-  const handleClickCancel = () => {
-    setChangeImageProfile(false);
-  };
-
   const handleClickChange = () => {
-    setChangeImageProfile(true);
+    setChangeImageProfile(!changeImageProfile);
   };
   useEffect(() => {
     if (messageEvent === undefined) return;
@@ -79,10 +41,7 @@ export const ImageProfileModal = ({ content }: { content: string }) => {
     toast.error(messageEvent.msg[0].message);
   }, [messageEvent]);
   return (
-    <div
-      className={`${styles.modalContainer}`}
-      onClick={handleClickImageProfile}
-    >
+    <Modal onModalCLose={handleClickClose}>
       <Toaster richColors />
       <div className={`${styles.cardImageProfile} ${styles[theme]}`}>
         <header className={styles.header}>
@@ -107,8 +66,8 @@ export const ImageProfileModal = ({ content }: { content: string }) => {
             </button>
             <h1>VideoBox</h1>
           </div>
-          <span>Foto de perfil</span>
-          <p>Una foto ayudará a saber cuando hayas accedido a la cuenta</p>
+          <span>Profile photo</span>
+          <p>A photo will help to know when you have accessed the account</p>
         </header>
         <main className={styles.containerImage}>
           <div className={`${styles.image} ${styles[theme]}`}>
@@ -126,7 +85,7 @@ export const ImageProfileModal = ({ content }: { content: string }) => {
                 Url:
                 <input
                   type="url"
-                  placeholder="Ingrese la URL de su imagen"
+                  placeholder="Enter your image URL"
                   value={url}
                   onChange={(e) => {
                     setUrl(e.target.value);
@@ -134,20 +93,20 @@ export const ImageProfileModal = ({ content }: { content: string }) => {
                 />
               </label>
               <div className={styles.buttons}>
-                <Button text="Guardar" onClick={handleClickSave} />
+                <Button text="Saved" onClick={handleClickSave} />
                 <Button
-                  text="Cancelar"
+                  text="Cancel"
                   type="primary"
-                  onClick={handleClickCancel}
+                  onClick={handleClickChange}
                 />
               </div>
             </div>
           ) : (
             <>
               <div className={styles.buttons}>
-                <Button text="Cambiar" onClick={handleClickChange} />
+                <Button text="Change" onClick={handleClickChange} />
                 <Button
-                  text="Quitar"
+                  text="Remove"
                   type="primary"
                   onClick={() => {
                     void startDeletingEvent();
@@ -158,6 +117,6 @@ export const ImageProfileModal = ({ content }: { content: string }) => {
           )}
         </footer>
       </div>
-    </div>
+    </Modal>
   );
 };

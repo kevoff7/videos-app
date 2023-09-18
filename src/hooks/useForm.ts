@@ -12,17 +12,11 @@ export const useForm = () => {
     }));
   };
 
-  const resetForm = () => {
-    setFormValues({});
-    setFormValidation({});
-  };
-
   return {
     formValues,
     formValidation,
     setFormValidation,
     handleChange,
-    setFormValues,
-    resetForm
+    setFormValues
   };
 };

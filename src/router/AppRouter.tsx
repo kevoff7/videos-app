@@ -2,7 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { Login, Register } from '../auth/pages';
 import { Status, useAuthStore } from '../store/auth';
 import { useEffect } from 'react';
-import { Home, Profile } from '../video-box/pages';
+import { Profile, ListLikedVideos, Videos } from '../video-box/pages';
 
 export const AppRouter = () => {
   const checkAuthToken = useAuthStore((state) => state.checkAuthToken);
@@ -26,9 +26,10 @@ export const AppRouter = () => {
         </>
       ) : (
         <>
-          <Route path="/home" element={<Home />} />
+          <Route path="/videos" element={<Videos />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/*" element={<Navigate to={'/home'} />} />
+          <Route path="/listliked" element={<ListLikedVideos />} />
+          <Route path="/*" element={<Navigate to={'/videos'} />} />
         </>
       )}
       ;

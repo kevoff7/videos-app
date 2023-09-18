@@ -35,3 +35,39 @@
     }
   }
 }
+
+.buttonModal {
+  border: none;
+  width: 100%;
+  padding: 0.4rem;
+  background-color: transparent;
+  border: 1px solid var(--light_background);
+  color: var(--light_text);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+
+  &.button1 {
+    &:hover {
+      transition-duration: 0.3s;
+      background-color: #35b979;
+      color: var(--light_text);
+    }
+  }
+
+  &.button2 {
+    &:hover {
+      transition-duration: 0.3s;
+      background-color: #d21e24;
+      color: var(--light_text);
+    }
+  }
+
+  &.button3 {
+    &:hover {
+      transition-duration: 0.3s;
+      background-color: #fb6d3a;
+      color: var(--light_text);
+    }
+  }
+}

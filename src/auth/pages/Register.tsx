@@ -29,40 +29,40 @@ export const Register = () => {
         <Form
           onSubmit={register}
           title="Registrate"
-          description="Formulario para crear una cuenta"
+          description="Form to create an account"
         >
           <div>
             <Form.Input
-              label="Nombre"
+              label="Name"
               name={'name'}
-              placeholder="Ingresa tu nombre..."
+              placeholder="Enter your name..."
             />
             <Form.Input
-              label="Correo"
+              label="Email"
               name={'email'}
-              placeholder="Ingresa tu correo..."
+              placeholder="Enter your email..."
             />
             <Form.Input
-              label="Contraseña"
+              label="Password"
               name={'password'}
-              placeholder="Ingresa tu contraseña..."
+              placeholder="Enter your password..."
               type="password"
             />
             <Form.Input
-              label="Confirmar contraseña"
+              label="Confirmed password"
               name={'confirmedPassword'}
-              placeholder="Repita su contraseña..."
+              placeholder="Repeat your password..."
               type="password"
             />
           </div>
           <Form.SubmitButton
-            buttonText="Crear cuenta"
+            buttonText="Create account"
             check={checkingCredentials}
           />
 
           <Form.Footer
-            description="Ya tienes cuenta?"
-            textLink="Inicia sesión"
+            description="Already have an account?"
+            textLink="Login"
             link="/auth/login"
           />
         </Form>

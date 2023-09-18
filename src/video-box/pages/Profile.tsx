@@ -1,11 +1,32 @@
 import { useEffect } from 'react';
-import { useVideoBoxStore } from '../../store';
-import { Layout } from '../components';
+import { useAuthStore, useUiStore, useVideoBoxStore } from '../../store';
+import { ButtonModal, Layout } from '../components';
+import { useTheme } from '../../context/ThemeContext';
+import { Toaster, toast } from 'sonner';
 
-// import styles from '../../styles/profile.module.scss';
+import styles from '../../styles/profile.module.scss';
+import { type Event } from '../../interfaces/events';
+import { VideoModal } from './components/VideoModal';
+import { CardVideo } from './components/CardVideo';
 
 export const Profile = () => {
+  const { theme } = useTheme();
+
+  const profile = useAuthStore((state) => state.profile);
+
   const events = useVideoBoxStore((state) => state.events);
+  const messageEvent = useVideoBoxStore((state) => state.messageEvent);
+
+  const isModalOpenVideoDetails = useUiStore(
+    (state) => state.isModalOpenVideoDetails
+  );
+
+  const onModalOpenVideoDetails = useUiStore(
+    (state) => state.onModalOpenVideoDetails
+  );
+  const onModalCloseVideoDetails = useUiStore(
+    (state) => state.onModalCloseVideoDetails
+  );
 
   const startLoadingEvents = useVideoBoxStore(
     (state) => state.startLoadingEvents
@@ -13,6 +34,10 @@ export const Profile = () => {
   const startSavingEvents = useVideoBoxStore(
     (state) => state.startSavingEvents
   );
+  const startPublishEvents = useVideoBoxStore(
+    (state) => state.startPublishEvents
+  );
+  const setActiveEvents = useVideoBoxStore((state) => state.setActiveEvents);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -24,52 +49,137 @@ export const Profile = () => {
     form.reset();
   };
 
+  const handleClickPublish = ({
+    idVideo,
+    idUser,
+    published
+  }: {
+    idVideo: number;
+    idUser: number;
+    published: boolean;
+  }) => {
+    void startPublishEvents({
+      idVideo,
+      dataVideo: { published: !published, idUser }
+    });
+  };
+
+  const handleClickVideoDetails = (valueVideo: Event) => {
+    setActiveEvents(valueVideo);
+    onModalOpenVideoDetails();
+  };
+
   useEffect(() => {
     void startLoadingEvents();
-  }, []);
+  }, [startLoadingEvents]);
+
+  useEffect(() => {
+    if (messageEvent === undefined) return;
+    if (messageEvent.ok) {
+      toast.success(messageEvent.msg[0].message);
+      onModalCloseVideoDetails();
+      return;
+    }
+
+    messageEvent.msg.map((event) => toast.error(event.message));
+  }, [messageEvent, onModalCloseVideoDetails]);
   return (
     <Layout>
-      <div>
-        Mostrar videos del creador y permitir crear nuevos videos
-        <br />
-        dos botones PUBLICAR y DETALLES DEL VIDEO donde mostraremos una card
-        para eliminar o editarlo
-      </div>
-      <h1>Para guardar un video</h1>
-      <p>
-        Ve a un video de Yotube, toca el boton de compartir, copia el enlace y
-        pegalo acá
-      </p>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Url:
-          <input name="url" type="url" placeholder="Ingrese la url del video" />
-        </label>
-        <label>
-          Titulo:
-          <input
-            name="title"
-            type="text"
-            placeholder="Ingrese el titulo de el video"
-          />
-        </label>
-        <button type="submit">Enviar</button>
-      </form>
-      <section>
-        {events.map((event) => (
-          <article key={event.id_video}>
-            <iframe
-              width="315"
-              frameBorder="0"
-              height="215"
-              src={event.url}
-              title="YouTube video player"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-            ></iframe>
-          </article>
-        ))}
-      </section>
+      {isModalOpenVideoDetails && <VideoModal />}
+      <Toaster expand richColors />
+      <header className={styles.header}>
+        <h1>To save a video</h1>
+        <p>
+          Go to a Yotube video, click on the share button and copy the link.
+        </p>
+      </header>
+      <h2>Your videos</h2>
+      <main className={styles.sectionList}>
+        <article className={`${styles.cardList} ${styles[theme]}`}>
+          <form className={styles.form} onSubmit={handleSubmit}>
+            <div>
+              <p>Video</p>
+            </div>
+            <label>
+              Url:
+              <input
+                name="url"
+                type="url"
+                placeholder="Enter the url of the video"
+              />
+            </label>
+            <label>
+              Title:
+              <input
+                name="title"
+                type="text"
+                placeholder="Enter the title of the video"
+              />
+            </label>
+            <button type="submit" className={styles.cssbuttonsIoButton}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                width="24"
+                height="24"
+              >
+                <path fill="none" d="M0 0h24v24H0z"></path>
+                <path
+                  fill="currentColor"
+                  d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"
+                ></path>
+              </svg>
+              <span>Add video</span>
+            </button>
+          </form>
+        </article>
+        {events.map((event) => {
+          return (
+            event.id === profile.id && (
+              <CardVideo key={event.id_video} url={event.url}>
+                <div className={styles.cardListTitles}>
+                  <h2>Title: {event.title}</h2>
+                  <p>Saved the: {event.date.split('T', 1)}</p>
+                </div>
+                <div className={styles.buttons}>
+                  {event.published ? (
+                    <ButtonModal
+                      text="Unpublish"
+                      type="button2"
+                      onClick={() => {
+                        handleClickPublish({
+                          published: event.published,
+                          idVideo: event.id_video,
+                          idUser: event.id
+                        });
+                      }}
+                    />
+                  ) : (
+                    <ButtonModal
+                      text="Publish"
+                      type="button1"
+                      onClick={() => {
+                        handleClickPublish({
+                          published: event.published,
+                          idVideo: event.id_video,
+                          idUser: event.id
+                        });
+                      }}
+                    />
+                  )}
+                  <ButtonModal
+                    text="Details video"
+                    type="button3"
+                    onClick={() => {
+                      handleClickVideoDetails(event);
+                    }}
+                  />
+                </div>
+              </CardVideo>
+            )
+          );
+        })}
+      </main>
     </Layout>
   );
 };

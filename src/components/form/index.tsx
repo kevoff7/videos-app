@@ -29,13 +29,11 @@ export const FormContext = createContext<FormContextType | undefined>(
 
 export const Form = ({ title, description, children, onSubmit }: FormProps) => {
   const { theme } = useTheme();
-  const { formValues, formValidation, handleChange, setFormValues, resetForm } =
-    useForm();
+  const { formValues, formValidation, handleChange, setFormValues } = useForm();
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
     onSubmit(formValues);
-    // resetForm();
   };
 
   return (
