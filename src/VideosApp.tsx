@@ -1,13 +1,15 @@
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
 import { AppRouter } from './router/AppRouter';
 
 export const VideosApp = () => {
   return (
     <ThemeProvider>
-      <BrowserRouter>
+      {/* <BrowserRouter> */}
+      <HashRouter>
         <AppRouter />
-      </BrowserRouter>
+      </HashRouter>
+      {/* </BrowserRouter> */}
     </ThemeProvider>
   );
 };
