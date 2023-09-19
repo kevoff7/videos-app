@@ -8,6 +8,7 @@ import styles from '../../styles/profile.module.scss';
 import { type Event } from '../../interfaces/events';
 import { VideoModal } from './components/VideoModal';
 import { CardVideo } from './components/CardVideo';
+import { Loader } from '../../components/Loader/Loader';
 
 export const Profile = () => {
   const { theme } = useTheme();
@@ -16,6 +17,7 @@ export const Profile = () => {
 
   const events = useVideoBoxStore((state) => state.events);
   const messageEvent = useVideoBoxStore((state) => state.messageEvent);
+  const check = useVideoBoxStore((state) => state.check);
 
   const isModalOpenVideoDetails = useUiStore(
     (state) => state.isModalOpenVideoDetails
@@ -129,7 +131,7 @@ export const Profile = () => {
                   d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"
                 ></path>
               </svg>
-              <span>Add video</span>
+              <span>{check ? <Loader /> : 'Add video'}</span>
             </button>
           </form>
         </article>

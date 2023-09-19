@@ -12,13 +12,16 @@ export const ImageProfileModal = ({ content }: { content: string }) => {
   const [url, setUrl] = useState('');
 
   const messageEvent = useAuthStore((state) => state.messageEvent);
+  const check = useAuthStore((state) => state.check);
+
   const clearMessageEvent = useAuthStore((state) => state.clearMessageEvent);
+
+  const startSavingEvent = useAuthStore((state) => state.startSavingEvent);
+  const startDeletingEvent = useAuthStore((state) => state.startDeletingEvent);
 
   const onModalCloseImageProfile = useUiStore(
     (state) => state.onModalCloseImageProfile
   );
-  const startSavingEvent = useAuthStore((state) => state.startSavingEvent);
-  const startDeletingEvent = useAuthStore((state) => state.startDeletingEvent);
 
   const handleClickClose = () => {
     onModalCloseImageProfile();
@@ -27,6 +30,7 @@ export const ImageProfileModal = ({ content }: { content: string }) => {
 
   const handleClickSave = () => {
     void startSavingEvent(url);
+    setUrl('');
   };
 
   const handleClickChange = () => {
@@ -93,7 +97,7 @@ export const ImageProfileModal = ({ content }: { content: string }) => {
                 />
               </label>
               <div className={styles.buttons}>
-                <Button text="Saved" onClick={handleClickSave} />
+                <Button check={check} text="Saved" onClick={handleClickSave} />
                 <Button
                   text="Cancel"
                   type="primary"
@@ -106,6 +110,7 @@ export const ImageProfileModal = ({ content }: { content: string }) => {
               <div className={styles.buttons}>
                 <Button text="Change" onClick={handleClickChange} />
                 <Button
+                  check={check}
                   text="Remove"
                   type="primary"
                   onClick={() => {

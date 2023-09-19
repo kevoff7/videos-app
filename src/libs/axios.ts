@@ -5,7 +5,6 @@ interface CustomHeaders {
   'x-token': string | null;
 }
 const { VITE_API_URL } = getEnvVariables();
-
 const authApi = axios.create({
   baseURL: VITE_API_URL
 });

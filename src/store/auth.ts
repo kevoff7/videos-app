@@ -24,6 +24,7 @@ interface State {
   checkingCredentials: boolean;
   messageEvent: undefined | any;
   messageLikeEvent: undefined | any;
+  check: boolean;
 }
 
 interface Actions {
@@ -59,6 +60,7 @@ export const useAuthStore = create<State & Actions>((set, get) => {
     checkingCredentials: false,
     messageEvent: undefined,
     messageLikeEvent: undefined,
+    check: false,
 
     registerUser: async (user: CreateUser) => {
       set({ checkingCredentials: true });
@@ -148,6 +150,7 @@ export const useAuthStore = create<State & Actions>((set, get) => {
       });
     },
     startSavingEvent: async (url) => {
+      set({ check: true });
       try {
         const { profile } = get();
         const { data } = await addImageRequest({
@@ -168,12 +171,14 @@ export const useAuthStore = create<State & Actions>((set, get) => {
         console.log(error);
         set({ messageEvent: error.response.data });
       } finally {
+        set({ check: false });
         setTimeout(() => {
           set({ messageEvent: undefined });
         }, 5000);
       }
     },
     startDeletingEvent: async () => {
+      set({ check: true });
       try {
         const { profile } = get();
         const { data } = await addImageRequest({
@@ -194,6 +199,7 @@ export const useAuthStore = create<State & Actions>((set, get) => {
         console.log(error);
         set({ messageEvent: error.response.data });
       } finally {
+        set({ check: false });
         setTimeout(() => {
           set({ messageEvent: undefined });
         }, 5000);

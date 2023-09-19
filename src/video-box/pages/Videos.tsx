@@ -12,6 +12,9 @@ export const Videos = () => {
 
   const profile = useAuthStore((state) => state.profile);
   const messageLikeEvent = useAuthStore((state) => state.messageLikeEvent);
+  const clearMessageLikeEvent = useAuthStore(
+    (state) => state.clearMessageLikeEvent
+  );
 
   const events = useVideoBoxStore((state) => state.events);
 
@@ -29,11 +32,12 @@ export const Videos = () => {
   useEffect(() => {
     if (refInit.current) {
       refInit.current = false;
+      clearMessageLikeEvent();
       return;
     }
     if (messageLikeEvent === undefined) return;
     toast.success(messageLikeEvent);
-  }, [messageLikeEvent]);
+  }, [messageLikeEvent, clearMessageLikeEvent]);
 
   return (
     <Layout>

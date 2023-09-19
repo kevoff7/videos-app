@@ -16,6 +16,9 @@ export const ListLikedVideos = () => {
   const startLoadingEvents = useVideoBoxStore(
     (state) => state.startLoadingEvents
   );
+  const clearMessageLikeEvent = useAuthStore(
+    (state) => state.clearMessageLikeEvent
+  );
   const startLikeCreateEvents = useAuthStore(
     (state) => state.startLikeCreateEvents
   );
@@ -23,12 +26,12 @@ export const ListLikedVideos = () => {
   useEffect(() => {
     if (refInit.current) {
       refInit.current = false;
+      clearMessageLikeEvent();
       return;
     }
-
     if (messageLikeEvent === undefined) return;
     toast.error(messageLikeEvent);
-  }, [messageLikeEvent]);
+  }, [messageLikeEvent, clearMessageLikeEvent]);
 
   useEffect(() => {
     void startLoadingEvents();

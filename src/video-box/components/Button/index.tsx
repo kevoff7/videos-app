@@ -1,3 +1,4 @@
+import { Loader } from '../../../components/Loader/Loader';
 import { useTheme } from '../../../context/ThemeContext';
 import styles from './styes.module.scss';
 
@@ -5,6 +6,7 @@ interface ButtonProps {
   text: string;
   onClick: () => void;
   type?: 'primary' | 'secondary';
+  check?: boolean;
 }
 
 interface ButtonModalProps {
@@ -12,16 +14,22 @@ interface ButtonModalProps {
   onClick?: () => void;
   type?: 'button1' | 'button2' | 'button3';
   typeButton?: 'submit';
+  check?: boolean;
 }
 
-export const Button = ({ text, onClick, type = 'secondary' }: ButtonProps) => {
+export const Button = ({
+  text,
+  onClick,
+  check = false,
+  type = 'secondary'
+}: ButtonProps) => {
   const { theme } = useTheme();
   return (
     <button
       className={`${styles.button} ${styles[type]} ${styles[theme]}`}
       onClick={onClick}
     >
-      {text}
+      {check ? <Loader /> : text}
     </button>
   );
 };
@@ -30,7 +38,8 @@ export const ButtonModal = ({
   text,
   onClick,
   type = 'button1',
-  typeButton
+  typeButton,
+  check = false
 }: ButtonModalProps) => {
   const { theme } = useTheme();
   return (
@@ -39,7 +48,7 @@ export const ButtonModal = ({
       onClick={onClick}
       type={typeButton}
     >
-      {text}
+      {check ? <Loader /> : text}
     </button>
   );
 };

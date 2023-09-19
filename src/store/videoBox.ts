@@ -23,6 +23,7 @@ interface State {
   events: Event[];
   activeEvent: Event | null;
   messageEvent: MessageEventProps | undefined;
+  check: boolean;
 }
 interface Actions {
   startLoadingEvents: () => Promise<void>;
@@ -41,6 +42,8 @@ export const useVideoBoxStore = create<State & Actions>((set, get) => {
     events: [],
     messageEvent: undefined,
     activeEvent: null,
+    check: false,
+
     setActiveEvents: (valueEvent) => {
       set({ activeEvent: valueEvent });
     },
@@ -54,6 +57,7 @@ export const useVideoBoxStore = create<State & Actions>((set, get) => {
       }
     },
     startSavingEvents: async (videoEvent) => {
+      set({ check: true });
       try {
         const { data } = await createEventRequest({
           url: videoEvent.url,
@@ -66,6 +70,7 @@ export const useVideoBoxStore = create<State & Actions>((set, get) => {
       } catch (error: any) {
         set({ messageEvent: error.response.data });
       } finally {
+        set({ check: false });
         setTimeout(() => {
           set({ messageEvent: undefined });
         }, 3000);

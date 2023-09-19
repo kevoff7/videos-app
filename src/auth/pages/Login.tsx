@@ -27,7 +27,7 @@ export const Login = () => {
             <Form.Input
               label="Email"
               name={'email'}
-              placeholder="test@gmail.com"
+              placeholder="test@test.com"
             />
             <Form.Input
               label="Password"
