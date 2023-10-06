@@ -37,6 +37,7 @@ interface Actions {
   clearMessageEvent: () => void;
   startLikeCreateEvents: (value: number) => Promise<void>;
   clearMessageLikeEvent: () => void;
+  clearErrorMessage: () => void;
 }
 
 export enum Status {
@@ -110,6 +111,9 @@ export const useAuthStore = create<State & Actions>((set, get) => {
       } finally {
         set({ checkingCredentials: false });
       }
+    },
+    clearErrorMessage: () => {
+      set({ errorMessage: undefined });
     },
     checkAuthToken: async () => {
       const token = localStorage.getItem('token');
