@@ -6,11 +6,10 @@ import styles from './styles.module.scss';
 import { Toaster, toast } from 'sonner';
 
 export const Register = () => {
-  const checkingCredentials = useAuthStore(
-    (state) => state.checkingCredentials
+  const { checkingCredentials, errorMessage, registerUser } = useAuthStore(
+    (state) => state
   );
-  const errorMessage = useAuthStore((state) => state.errorMessage);
-  const registerUser = useAuthStore((state) => state.registerUser);
+
   const register = (formData: any) => {
     void registerUser(formData);
   };

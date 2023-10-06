@@ -2,7 +2,7 @@ export interface Event {
   id_video: number;
   url: string;
   title: string;
-  date: string;
+  createdAt: string;
   published: boolean;
   id: number;
 }

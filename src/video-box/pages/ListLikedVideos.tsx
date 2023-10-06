@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuthStore, useVideoBoxStore } from '../../store';
 import { Layout } from '../components';
 import { CardVideo } from './components/CardVideo';
@@ -7,36 +7,28 @@ import { Toaster, toast } from 'sonner';
 import styles from '../../styles/listedVideos.module.scss';
 
 export const ListLikedVideos = () => {
-  const refInit = useRef(true);
+  const [shouldRunEffect, setShouldRunEffect] = useState(true);
+  const { profile, messageLikeEvent } = useAuthStore((state) => state);
 
-  const profile = useAuthStore((state) => state.profile);
-  const messageLikeEvent = useAuthStore((state) => state.messageLikeEvent);
-
-  const events = useVideoBoxStore((state) => state.events);
-  const startLoadingEvents = useVideoBoxStore(
-    (state) => state.startLoadingEvents
+  const { events, startLoadingEvents } = useVideoBoxStore((state) => state);
+  const { clearMessageLikeEvent, startLikeCreateEvents } = useAuthStore(
+    (state) => state
   );
-  const clearMessageLikeEvent = useAuthStore(
-    (state) => state.clearMessageLikeEvent
-  );
-  const startLikeCreateEvents = useAuthStore(
-    (state) => state.startLikeCreateEvents
-  );
-
   useEffect(() => {
-    if (refInit.current) {
-      refInit.current = false;
-      clearMessageLikeEvent();
+    if (shouldRunEffect) {
+      setShouldRunEffect(false);
       return;
     }
     if (messageLikeEvent === undefined) return;
     toast.error(messageLikeEvent);
-  }, [messageLikeEvent, clearMessageLikeEvent]);
+    return () => {
+      clearMessageLikeEvent();
+    };
+  }, [messageLikeEvent, clearMessageLikeEvent, shouldRunEffect]);
 
   useEffect(() => {
     void startLoadingEvents();
   }, [startLoadingEvents]);
-
   return (
     <Layout>
       <Toaster richColors />
@@ -44,6 +36,7 @@ export const ListLikedVideos = () => {
       <section className={styles.sectionList}>
         {events.map(
           (event) =>
+            profile.liked_videos != null &&
             profile.liked_videos.includes(event.id_video) && (
               <CardVideo key={event.id_video} url={event.url}>
                 <div>
@@ -53,7 +46,8 @@ export const ListLikedVideos = () => {
                       void startLikeCreateEvents(event.id_video);
                     }}
                   >
-                    {profile.liked_videos.includes(event.id_video) ? (
+                    {profile.liked_videos != null &&
+                    profile.liked_videos.includes(event.id_video) ? (
                       <Like color="#fb6d3a" height="35" width="35" />
                     ) : (
                       <Like height="35" width="35" />

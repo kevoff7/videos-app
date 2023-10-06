@@ -8,38 +8,29 @@ import styles from '../../styles/profile.module.scss';
 import { type Event } from '../../interfaces/events';
 import { VideoModal } from './components/VideoModal';
 import { CardVideo } from './components/CardVideo';
-import { Loader } from '../../components/Loader/Loader';
 
 export const Profile = () => {
   const { theme } = useTheme();
 
-  const profile = useAuthStore((state) => state.profile);
+  const { profile } = useAuthStore((state) => state);
 
-  const events = useVideoBoxStore((state) => state.events);
-  const messageEvent = useVideoBoxStore((state) => state.messageEvent);
-  const check = useVideoBoxStore((state) => state.check);
+  const { events, messageEvent, check } = useVideoBoxStore((state) => state);
+
+  const {
+    startLoadingEvents,
+    startSavingEvents,
+    startPublishEvents,
+    setActiveEvents,
+    clearMessageEvent
+  } = useVideoBoxStore((state) => state);
 
   const isModalOpenVideoDetails = useUiStore(
     (state) => state.isModalOpenVideoDetails
   );
 
-  const onModalOpenVideoDetails = useUiStore(
-    (state) => state.onModalOpenVideoDetails
+  const { onModalOpenVideoDetails, onModalCloseVideoDetails } = useUiStore(
+    (state) => state
   );
-  const onModalCloseVideoDetails = useUiStore(
-    (state) => state.onModalCloseVideoDetails
-  );
-
-  const startLoadingEvents = useVideoBoxStore(
-    (state) => state.startLoadingEvents
-  );
-  const startSavingEvents = useVideoBoxStore(
-    (state) => state.startSavingEvents
-  );
-  const startPublishEvents = useVideoBoxStore(
-    (state) => state.startPublishEvents
-  );
-  const setActiveEvents = useVideoBoxStore((state) => state.setActiveEvents);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -77,14 +68,18 @@ export const Profile = () => {
 
   useEffect(() => {
     if (messageEvent === undefined) return;
+
     if (messageEvent.ok) {
       toast.success(messageEvent.msg[0].message);
       onModalCloseVideoDetails();
-      return;
+    } else {
+      messageEvent.msg.map((event) => toast.error(event.message));
     }
+    return () => {
+      clearMessageEvent();
+    };
+  }, [messageEvent, onModalCloseVideoDetails, clearMessageEvent]);
 
-    messageEvent.msg.map((event) => toast.error(event.message));
-  }, [messageEvent, onModalCloseVideoDetails]);
   return (
     <Layout>
       {isModalOpenVideoDetails && <VideoModal />}
@@ -131,7 +126,7 @@ export const Profile = () => {
                   d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"
                 ></path>
               </svg>
-              <span>{check ? <Loader /> : 'Add video'}</span>
+              <span>{check ? '...' : 'Add video'}</span>
             </button>
           </form>
         </article>
@@ -141,7 +136,7 @@ export const Profile = () => {
               <CardVideo key={event.id_video} url={event.url}>
                 <div className={styles.cardListTitles}>
                   <h2>Title: {event.title}</h2>
-                  <p>Saved the: {event.date.split('T', 1)}</p>
+                  <p>Saved the: {event.createdAt.split('T', 1)}</p>
                 </div>
                 <div className={styles.buttons}>
                   {event.published ? (

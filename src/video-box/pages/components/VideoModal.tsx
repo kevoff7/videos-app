@@ -7,16 +7,11 @@ import styles from './styles/video.module.scss';
 export const VideoModal = () => {
   const { theme } = useTheme();
 
-  const activeEvent = useVideoBoxStore((state) => state.activeEvent);
+  const { activeEvent, startUpdateEvents, startDeleteEvents } =
+    useVideoBoxStore((state) => state);
 
   const onModalCloseVideoDetails = useUiStore(
     (state) => state.onModalCloseVideoDetails
-  );
-  const startUpdateEvents = useVideoBoxStore(
-    (state) => state.startUpdateEvents
-  );
-  const startDeleteEvents = useVideoBoxStore(
-    (state) => state.startDeleteEvents
   );
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -49,23 +44,23 @@ export const VideoModal = () => {
         {activeEvent !== null && (
           <CardVideo url={activeEvent.url}>
             <form onSubmit={onSubmit} className={styles.formCard}>
-              <h2>Ingrese los datos a editar</h2>
+              <h2>Enter the data to edit</h2>
               <label>
-                Nueva url:
-                <input name="url" type="url" placeholder="Url del video" />
+                New url:
+                <input name="url" type="url" placeholder="Url of the video" />
               </label>
               <label>
-                Nuevo titulo:
+                New title:
                 <input
                   name="title"
                   type="text"
                   placeholder="Titulo del video"
                 />
               </label>
-              <ButtonModal text="Editar" typeButton="submit" type="button1" />
+              <ButtonModal text="Edit" typeButton="submit" type="button1" />
             </form>
             <ButtonModal
-              text="Borrar video"
+              text="Delete video"
               type="button2"
               onClick={handleClickDelete}
             />

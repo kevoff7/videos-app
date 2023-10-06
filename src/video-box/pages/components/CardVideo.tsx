@@ -8,7 +8,6 @@ interface CardVideoProps extends EventPick {
   children: React.ReactNode;
 }
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export const CardVideo = ({ url, children }: CardVideoProps) => {
   const { theme } = useTheme();
   return (

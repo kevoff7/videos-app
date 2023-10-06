@@ -35,6 +35,7 @@ interface Actions {
   setActiveEvents: (value: Event) => void;
   startUpdateEvents: ({ id, dataVideo }: UpdateEventsProps) => Promise<void>;
   startDeleteEvents: (value: number) => Promise<void>;
+  clearMessageEvent: () => void;
 }
 
 export const useVideoBoxStore = create<State & Actions>((set, get) => {
@@ -71,9 +72,6 @@ export const useVideoBoxStore = create<State & Actions>((set, get) => {
         set({ messageEvent: error.response.data });
       } finally {
         set({ check: false });
-        setTimeout(() => {
-          set({ messageEvent: undefined });
-        }, 3000);
       }
     },
     startPublishEvents: async ({ idVideo, dataVideo }) => {
@@ -92,10 +90,6 @@ export const useVideoBoxStore = create<State & Actions>((set, get) => {
         set({ messageEvent: data, events: newEvents });
       } catch (error) {
         console.log(error);
-      } finally {
-        setTimeout(() => {
-          set({ messageEvent: undefined });
-        }, 3000);
       }
     },
     startUpdateEvents: async ({ id, dataVideo }) => {
@@ -112,10 +106,6 @@ export const useVideoBoxStore = create<State & Actions>((set, get) => {
       } catch (error: any) {
         set({ messageEvent: error.response.data });
         console.log(error);
-      } finally {
-        setTimeout(() => {
-          set({ messageEvent: undefined });
-        }, 3000);
       }
     },
     startDeleteEvents: async (id: number) => {
@@ -126,11 +116,10 @@ export const useVideoBoxStore = create<State & Actions>((set, get) => {
         set({ events: newEvents, messageEvent: data });
       } catch (error: any) {
         console.log(error);
-      } finally {
-        setTimeout(() => {
-          set({ messageEvent: undefined });
-        }, 3000);
       }
+    },
+    clearMessageEvent: () => {
+      set({ messageEvent: undefined });
     }
   };
 });

@@ -28,6 +28,6 @@ export const relavidateJWTRequest = async () => {
   return await authApi.get('/auth/renew');
 };
 
-export const addImageRequest = async ({ uid, data }: AddImageRequest) => {
+export const updateImageRequest = async ({ uid, data }: AddImageRequest) => {
   return await authApi.put(`/auth/${uid}`, data);
 };

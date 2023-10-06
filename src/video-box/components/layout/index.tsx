@@ -11,9 +11,8 @@ export const Layout = ({ children }: LayoutVideoNubeProps) => {
   const { theme } = useTheme();
   const profile = useAuthStore((state) => state.profile);
 
-  const isModalOpenLogout = useUiStore((state) => state.isModalOpenLogout);
-  const isModalOpenImageProfile = useUiStore(
-    (state) => state.isModalOpenImageProfile
+  const { isModalOpenLogout, isModalOpenImageProfile } = useUiStore(
+    (state) => state
   );
 
   return (

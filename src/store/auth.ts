@@ -6,15 +6,15 @@ import {
   type CreateUser,
   relavidateJWTRequest
 } from '../api/auth';
-import { addImageRequest } from '../api/auth';
+import { updateImageRequest } from '../api/auth';
 import { createLikeEventsRequest } from '../api/events';
 
 interface ProfileProps {
   name: string;
   id: number;
   imageUrl: string | null;
-  follows: number[];
-  liked_videos: number[];
+  follows: number[] | null;
+  liked_videos: number[] | null;
 }
 
 interface State {
@@ -30,7 +30,6 @@ interface State {
 interface Actions {
   loginUser: (user: LoginUser) => Promise<void>;
   registerUser: (user: CreateUser) => Promise<void>;
-  clearErrorMessage: () => void;
   checkAuthToken: () => Promise<void>;
   logOut: () => void;
   startSavingEvent: (url: string) => Promise<void>;
@@ -139,9 +138,7 @@ export const useAuthStore = create<State & Actions>((set, get) => {
         set({ profile: undefined, status: Status.NotAuthenticated });
       }
     },
-    clearErrorMessage: () => {
-      set({ errorMessage: undefined });
-    },
+
     logOut: () => {
       localStorage.clear();
       set({
@@ -153,7 +150,7 @@ export const useAuthStore = create<State & Actions>((set, get) => {
       set({ check: true });
       try {
         const { profile } = get();
-        const { data } = await addImageRequest({
+        const { data } = await updateImageRequest({
           uid: profile.id,
           data: {
             url
@@ -172,16 +169,13 @@ export const useAuthStore = create<State & Actions>((set, get) => {
         set({ messageEvent: error.response.data });
       } finally {
         set({ check: false });
-        setTimeout(() => {
-          set({ messageEvent: undefined });
-        }, 5000);
       }
     },
     startDeletingEvent: async () => {
       set({ check: true });
       try {
         const { profile } = get();
-        const { data } = await addImageRequest({
+        const { data } = await updateImageRequest({
           uid: profile.id,
           data: {
             url: null
@@ -200,9 +194,6 @@ export const useAuthStore = create<State & Actions>((set, get) => {
         set({ messageEvent: error.response.data });
       } finally {
         set({ check: false });
-        setTimeout(() => {
-          set({ messageEvent: undefined });
-        }, 5000);
       }
     },
     clearMessageEvent: () => {
@@ -220,10 +211,6 @@ export const useAuthStore = create<State & Actions>((set, get) => {
         }));
       } catch (error) {
         console.log(error);
-      } finally {
-        setTimeout(() => {
-          set({ messageLikeEvent: undefined });
-        }, 2000);
       }
     },
     clearMessageLikeEvent: () => {

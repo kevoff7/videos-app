@@ -13,9 +13,8 @@ export const Navbar = () => {
   });
 
   const profile = useAuthStore((state) => state.profile);
-  const onModalOpenLogOut = useUiStore((state) => state.onModalOpenLogOut);
-  const onModalOpenImageProfile = useUiStore(
-    (state) => state.onModalOpenImageProfile
+  const { onModalOpenLogOut, onModalOpenImageProfile } = useUiStore(
+    (state) => state
   );
 
   const onCloseModal = () => {

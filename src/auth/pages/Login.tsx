@@ -6,11 +6,9 @@ import styles from './styles.module.scss';
 import { useEffect } from 'react';
 
 export const Login = () => {
-  const checkingCredentials = useAuthStore(
-    (state) => state.checkingCredentials
+  const { checkingCredentials, errorMessage, loginUser } = useAuthStore(
+    (state) => state
   );
-  const errorMessage = useAuthStore((state) => state.errorMessage);
-  const loginUser = useAuthStore((state) => state.loginUser);
   const login = (formData: any) => {
     void loginUser(formData);
   };

@@ -6,18 +6,18 @@ import { Toaster, toast } from 'sonner';
 import styles from './styles/imageProfile.module.scss';
 
 export const ImageProfileModal = ({ content }: { content: string }) => {
-  const { theme } = useTheme();
-
   const [changeImageProfile, setChangeImageProfile] = useState(false);
   const [url, setUrl] = useState('');
 
-  const messageEvent = useAuthStore((state) => state.messageEvent);
-  const check = useAuthStore((state) => state.check);
+  const { theme } = useTheme();
 
-  const clearMessageEvent = useAuthStore((state) => state.clearMessageEvent);
-
-  const startSavingEvent = useAuthStore((state) => state.startSavingEvent);
-  const startDeletingEvent = useAuthStore((state) => state.startDeletingEvent);
+  const {
+    messageEvent,
+    check,
+    startSavingEvent,
+    startDeletingEvent,
+    clearMessageEvent
+  } = useAuthStore((state) => state);
 
   const onModalCloseImageProfile = useUiStore(
     (state) => state.onModalCloseImageProfile
