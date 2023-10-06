@@ -11,14 +11,14 @@ interface FooterProps {
 }
 
 export const Footer = ({ description, link, textLink }: FooterProps) => {
-  const clearErrorMessage = useAuthStore((state) => state.clearErrorMessage);
+  const clearMessageEvent = useAuthStore((state) => state.clearMessageEvent);
   const { theme } = useTheme();
 
   return (
     <div className={`${styles.footer} ${styles[theme]}`}>
       <span className={`${styles.footerSpan} ${styles[theme]}`}>
         {description}
-        <Link to={link} onClick={clearErrorMessage}>
+        <Link to={link} onClick={clearMessageEvent}>
           {textLink}
         </Link>
       </span>
